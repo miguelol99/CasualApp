@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "972202356922",
+    "project_id": "casualapp-b1c55",
+    "storage_bucket": "casualapp-b1c55.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972202356922:android:d0968c4cd225fd2a395283",
+        "android_client_info": {
+          "package_name": "com.miguelol.casualapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972202356922-17nseiglh8ku7ti7u04q43slahnpsfil.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.miguelol.casualapp",
+            "certificate_hash": "aaaa4cfedd3b0ec68e955081a3969f5adee6af81"
+          }
+        },
+        {
+          "client_id": "972202356922-ormu2e5v95j0p9qn22ps7kck5reu7k3e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKS-mg9QGFoWrKIDJ4Rscjm_V3YZyDDx8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972202356922-ormu2e5v95j0p9qn22ps7kck5reu7k3e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

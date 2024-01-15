@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -23,27 +24,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.miguelol.casual.presentation.components.CustomSegmentedControl
+import com.miguelol.casualapp.domain.model.PlanType
 import com.miguelol.casualapp.presentation.theme.CasualAppTheme
 import com.miguelol.casualapp.utils.Constants.PUBLIC
 
 @Composable
 fun CustomSelectTypeDialog(
     onDismissRequest: () -> Unit,
-    onItemSelection: (String) -> Unit,
-    initialState: String
+    onItemSelection: (PlanType) -> Unit,
+    initialState: PlanType
 ) {
 
-    val selectedType = remember { mutableStateOf(PUBLIC) }
+    val selectedType = remember { mutableStateOf(PlanType.PUBLIC) }
 
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(180.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-
-            )
+                .height(240.dp),
+            shape = RoundedCornerShape(16.dp)
         ) {
             Column(
                 Modifier
@@ -58,8 +57,8 @@ fun CustomSelectTypeDialog(
                     initState = initialState
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                    TextButton(
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                    Button(
                         onClick = {
                             onItemSelection(selectedType.value)
                             onDismissRequest()
@@ -67,7 +66,7 @@ fun CustomSelectTypeDialog(
                     ) {
                         Text(text = "Confirm")
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
                     TextButton(onClick = { onDismissRequest() }) {
                         Text(text = "Cancel")
                     }
@@ -83,9 +82,9 @@ fun CustomSelectTypeDialog(
 fun PreviewCustomSelectTypeDialog() {
     CasualAppTheme {
         CustomSelectTypeDialog(
-            onDismissRequest = { /*TODO*/ },
+            onDismissRequest = { },
             onItemSelection = {},
-            initialState = PUBLIC
+            initialState = PlanType.PUBLIC
         )
     }
 }

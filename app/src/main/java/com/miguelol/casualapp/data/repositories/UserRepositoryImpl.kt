@@ -29,6 +29,8 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
 
     private val usersRef = database.collection(USERS)
+    private val friendsColRef = database.collectionGroup(FRIENDS)
+    private val requestsColRef = database.collectionGroup(FRIEND_REQUESTS)
 
     override fun getUser(uid: String): Flow<Response<User?>> =
         usersRef.document(uid).snapshots()
@@ -53,16 +55,11 @@ class UserRepositoryImpl @Inject constructor(
         val preview = user.toPreview()
         return try {
             coroutineScope {
-                val friendsDeferred = async {
-                    database.collectionGroup(FRIENDS).whereEqualTo(UID, uid).get().await()
-                }
-                val requestsDeferred = async {
-                    database.collectionGroup(FRIEND_REQUESTS).whereEqualTo("$FROM_USER.$UID", uid)
-                        .get().await()
-                }
+                val friendsDef = async { friendsColRef.whereEqualTo(UID, uid).get().await() }
+                val requestsDef = async { requestsColRef.whereEqualTo("$FROM_USER.$UID", uid).get().await() }
 
-                val friends = friendsDeferred.await()
-                val requests = requestsDeferred.await()
+                val friends = friendsDef.await()
+                val requests = requestsDef.await()
                 val userRef = usersRef.document(uid)
 
                 database.runBatch { batch ->

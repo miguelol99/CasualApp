@@ -39,7 +39,7 @@ import com.miguelol.casualapp.domain.usecases.images.ImageUseCases
 import com.miguelol.casualapp.domain.usecases.images.SaveImage
 import com.miguelol.casualapp.domain.usecases.plans.CreatePlan
 import com.miguelol.casualapp.domain.usecases.plans.FilterPlans
-import com.miguelol.casualapp.domain.usecases.plans.GetAllPlans
+import com.miguelol.casualapp.domain.usecases.plans.GetPlans
 import com.miguelol.casualapp.domain.usecases.plans.GetMyPlans
 import com.miguelol.casualapp.domain.usecases.plans.PlanUseCases
 import dagger.Module
@@ -123,10 +123,15 @@ object AppModule {
     )
 
     @Provides
-    fun providePlanUseCases(planRepository: PlanRepository, imageRepository: ImageRepository) = PlanUseCases(
-        getAllPlans = GetAllPlans(planRepository),
+    fun providePlanUseCases(
+        planRepository: PlanRepository,
+        userUseCases: UserUseCases,
+        friendUseCases: FriendUseCases,
+        imageUseCases: ImageUseCases
+    ) = PlanUseCases(
+        getPlans = GetPlans(planRepository),
         getMyPlans = GetMyPlans(planRepository),
         filterPlans = FilterPlans(),
-        createPlan = CreatePlan(planRepository, imageRepository)
+        createPlan = CreatePlan(planRepository, userUseCases, friendUseCases, imageUseCases)
     )
 }

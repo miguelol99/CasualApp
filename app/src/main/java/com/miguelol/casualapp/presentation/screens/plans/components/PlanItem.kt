@@ -28,7 +28,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.firebase.Timestamp
 import com.miguelol.casualapp.R
-import com.miguelol.casualapp.domain.model.PlanPreview
+import com.miguelol.casualapp.domain.model.Plan
+import com.miguelol.casualapp.domain.model.PlanType
+import com.miguelol.casualapp.domain.model.UserPreview
 import com.miguelol.casualapp.presentation.screens.components.CustomAsyncImage
 import com.miguelol.casualapp.presentation.screens.components.CustomIcon
 import com.miguelol.casualapp.presentation.theme.CasualAppTheme
@@ -42,7 +44,7 @@ import java.util.Locale
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PlanItem(
-    plan: PlanPreview,
+    plan: Plan,
     onClick: (String) -> Unit
 ) {
 
@@ -113,7 +115,7 @@ fun PlanItem(
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
-                        text = "by ${plan.host}",
+                        text = "by ${plan.host.username}",
                         style = MaterialTheme.typography.labelSmall,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -122,7 +124,7 @@ fun PlanItem(
                 }
             }
             when(plan.type) {
-                PRIVATE ->
+                PlanType.PRIVATE ->
                     CustomIcon(
                         modifier = Modifier
                             .padding(8.dp)
@@ -130,7 +132,7 @@ fun PlanItem(
                             .align(Alignment.TopEnd),
                         icon = R.drawable.outline_shield_24,
                     )
-                PUBLIC ->
+                PlanType.PUBLIC ->
                     CustomIcon(
                         modifier = Modifier
                             .padding(8.dp)
@@ -138,6 +140,7 @@ fun PlanItem(
                             .align(Alignment.TopEnd),
                         icon = R.drawable.round_public_24,
                     )
+                PlanType.SECRET -> TODO()
             }
 
             Row(
@@ -170,12 +173,12 @@ fun PlanItem(
 fun PreviewPlanCard() {
     CasualAppTheme {
         PlanItem(
-            plan = PlanPreview(
+            plan = Plan(
                 title = "A tomar unas cañas",
                 datetime = Timestamp(Date(999999999999)),
                 location = "Patton Pub",
-                host = "marianocp7",
-                type = PUBLIC,
+                host = UserPreview(username = "marianocp7"),
+                type = PlanType.PUBLIC,
                 participants = listOf("1","2")
             ),
             onClick = {}

@@ -2,12 +2,12 @@ package com.miguelol.casualapp.domain.model
 
 data class UserPreview(
     var uid: String = "",
-    var name: String = "",
     var username: String = "",
+    var name: String = "",
     var image: String = "",
 ) {
-    fun matchesQuery(text: String): Boolean {
-        return name.contains(text, true) || username.contains(text, true)
+    fun matchesTerm(term: String): Boolean {
+        return name.contains(term, true) || username.contains(term, true)
     }
 
     fun toMap(): Map<String, Any?> = mapOf(

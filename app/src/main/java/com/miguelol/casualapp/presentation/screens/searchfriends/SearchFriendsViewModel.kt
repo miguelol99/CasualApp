@@ -8,9 +8,7 @@ import com.miguelol.casualapp.domain.model.UserPreview
 import com.miguelol.casualapp.domain.usecases.FriendUseCases
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.UID
 import com.miguelol.casualapp.domain.usecases.auth.AuthUseCases
-import com.miguelol.casualapp.domain.usecases.UserUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -51,7 +49,7 @@ class SearchFriendsViewModel @Inject constructor(
                     errorMessage = resp.e.message
                 )
             is Response.Success -> {
-                val friends = if (resp.data.isNotEmpty()) resp.data.filter{ it.matchesQuery(text) }
+                val friends = if (resp.data.isNotEmpty()) resp.data.filter{ it.matchesTerm(text) }
                     else emptyList()
 
                 SearchFriendsUiState(

@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.miguelol.casualapp.R
+import com.miguelol.casualapp.domain.model.PlanType
 import com.miguelol.casualapp.presentation.theme.CasualAppTheme
 import com.miguelol.casualapp.utils.Constants.PRIVATE
 import com.miguelol.casualapp.utils.Constants.PUBLIC
@@ -42,28 +43,27 @@ import com.miguelol.casualapp.utils.Constants.SECRET
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomSegmentedControl(
-    onItemSelection: (String) -> Unit,
-    initState: String
+    onItemSelection: (PlanType) -> Unit,
+    initState: PlanType
 ) {
 
-    var state: String by remember { mutableStateOf(initState) }
+    var state by remember { mutableStateOf(initState) }
 
     var typeText: String = ""
     var typeExplanation: String = ""
     when (state) {
-        PUBLIC -> {
+        PlanType.PUBLIC -> {
             typeText = "Public"
             typeExplanation = "Everyone will see your plan!"
         }
-        PRIVATE -> {
+        PlanType.PRIVATE -> {
             typeText = "Private"
             typeExplanation = "Only your friends will see your plan!"
         }
-        SECRET -> {
+        PlanType.SECRET -> {
             typeText = "Secret"
             typeExplanation = "Only the people you invite will see the plan!"
         }
-        else -> { }
     }
 
     Column(
@@ -93,19 +93,19 @@ fun CustomSegmentedControl(
                     bottomEnd = 0.dp
                 ),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (state == PUBLIC)
+                    containerColor = if (state == PlanType.PUBLIC)
                         MaterialTheme.colorScheme.surfaceVariant
                     else
                         MaterialTheme.colorScheme.surface,
 
-                    contentColor = if (state == PUBLIC)
+                    contentColor = if (state == PlanType.PUBLIC)
                         MaterialTheme.colorScheme.primary
                     else
                         MaterialTheme.colorScheme.onSurface
                 ),
                 onClick = {
-                    if (state != PUBLIC) {
-                        state = PUBLIC
+                    if (state != PlanType.PUBLIC) {
+                        state = PlanType.PUBLIC
                         onItemSelection(state)
                     }
                 }
@@ -119,19 +119,19 @@ fun CustomSegmentedControl(
                 modifier = Modifier.weight(1f),
                 shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (state == PRIVATE)
+                    containerColor = if (state == PlanType.PRIVATE)
                         MaterialTheme.colorScheme.surfaceVariant
                     else
                         MaterialTheme.colorScheme.surface,
-                    contentColor = if (state == PRIVATE)
+                    contentColor = if (state == PlanType.PRIVATE)
                         MaterialTheme.colorScheme.primary
                     else
                         MaterialTheme.colorScheme.onSurface
                 ),
                 onClick = {
-                    if (state != PRIVATE) {
-                        state = PRIVATE
-                        onItemSelection(checkNotNull(state))
+                    if (state != PlanType.PRIVATE) {
+                        state = PlanType.PRIVATE
+                        onItemSelection(state)
                     }
                 }
             ) {
@@ -149,18 +149,18 @@ fun CustomSegmentedControl(
                     bottomStart = 0.dp
                 ),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (state == SECRET)
+                    containerColor = if (state == PlanType.SECRET)
                         MaterialTheme.colorScheme.surfaceVariant
                     else
                         MaterialTheme.colorScheme.surface,
-                    contentColor = if (state == SECRET)
+                    contentColor = if (state == PlanType.SECRET)
                         MaterialTheme.colorScheme.primary
                     else
                         MaterialTheme.colorScheme.onSurface
                 ),
                 onClick = {
-                    if (state != SECRET) {
-                        state = SECRET
+                    if (state != PlanType.SECRET) {
+                        state = PlanType.SECRET
                         onItemSelection(checkNotNull(state))
                     }
                 }
@@ -182,6 +182,6 @@ fun PreviewCustomSegmentedControl() {
     CasualAppTheme() {
         CustomSegmentedControl(
             onItemSelection = {},
-            initState = PRIVATE)
+            initState = PlanType.PRIVATE)
     }
 }

@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.firebase.Timestamp
-import com.miguelol.casualapp.domain.model.PlanPreview
-import com.miguelol.casualapp.presentation.screens.plans.PlansUiState
+import com.miguelol.casualapp.domain.model.Plan
+import com.miguelol.casualapp.domain.model.UserPreview
 import com.miguelol.casualapp.presentation.screens.plans.components.PlanItem
 import com.miguelol.casualapp.presentation.theme.CasualAppTheme
 
@@ -48,9 +48,9 @@ fun PreviewPlansContent() {
         MyPlansContent(
             uiState = MyPlansUiState(
                 plans = listOf(
-                    PlanPreview(
+                    Plan(
                         datetime = Timestamp.now(),
-                        host = "marianocp7",
+                        host = UserPreview(username = "marianocp7"),
                         location = "Mi casa",
                         title = "Vamos al cine"
                     )

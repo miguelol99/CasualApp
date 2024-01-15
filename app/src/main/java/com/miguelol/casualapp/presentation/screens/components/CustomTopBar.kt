@@ -21,13 +21,13 @@ fun CustomTopBar(
     modifier: Modifier = Modifier,
     title: String? = null,
     navigateBack: Boolean = false,
+    onNavigateBack: () -> Unit = {},
     actions: @Composable  (RowScope.() -> Unit) = {},
-    onNavigateBack: () -> Unit = {}
 ) {
 
     TopAppBar(
         modifier = modifier,
-        title = { if (title != null) Text(modifier = Modifier.padding(start = 10.dp), text = title) },
+        title = { if (title != null) Text(text = title) },
         navigationIcon = {
             if (navigateBack)
                 IconButton( onClick = { onNavigateBack() }) {

@@ -43,7 +43,6 @@ import com.miguelol.casualapp.presentation.screens.myplans.MyPlansViewModel
 import com.miguelol.casualapp.presentation.screens.requests.RequestsScreen
 import com.miguelol.casualapp.presentation.screens.requests.RequestsViewModel
 import com.miguelol.casualapp.presentation.screens.plans.PlansScreen
-import com.miguelol.casualapp.presentation.screens.plans.PlansUiState
 import com.miguelol.casualapp.presentation.screens.plans.PlansViewModel
 import com.miguelol.casualapp.presentation.screens.myprofile.MyProfileScreen
 import com.miguelol.casualapp.presentation.screens.myprofile.MyProfileViewModel
@@ -185,9 +184,8 @@ fun CasualNavGraph(
 
             composable( route = PLANS_ROUTE) {
                 val viewModel: PlansViewModel = hiltViewModel()
-                val uiState: PlansUiState by viewModel.uiState.collectAsStateWithLifecycle()
                 PlansScreen(
-                    uiState = uiState,
+                    uiStateFlow = viewModel.uiState,
                     onEvent = viewModel::onEvent,
                     onNavigateToPlanDetails =  { /*TODO*/}
                 )
@@ -206,7 +204,7 @@ fun CasualNavGraph(
             composable( route = CREATE_PLAN_ROUTE) {
                 val viewModel: CreatePlanViewModel = hiltViewModel()
                 CreatePlanScreen(
-                    uiState = viewModel.uiState,
+                    uiStateFlow = viewModel.uiState,
                     onEvent = viewModel::onEvent,
                     onNavigateToMyPlansScreen = {
                         navController.popBackStack(CREATE_PLAN_ROUTE, true)

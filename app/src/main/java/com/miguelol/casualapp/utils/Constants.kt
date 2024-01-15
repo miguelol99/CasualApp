@@ -7,6 +7,8 @@ object Constants {
     const val FRIEND_COUNT = "friendCount"
     const val PLANS = "plans"
     const val PARTICIPANTS = "participants"
+    const val FRIENDS_OF_HOST = "friendsOfHost"
+    const val HOST = "host"
 
 
     const val NAME = "name"

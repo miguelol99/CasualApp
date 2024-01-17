@@ -16,7 +16,15 @@ data class Plan(
     var participants: List<String> = emptyList(),
     var friendsOfHost: List<String> = emptyList(),
     @ServerTimestamp var timestamp: Timestamp? = null,
-)
+) {
+    fun toPreview(): PlanPreview {
+        return PlanPreview(
+            id = id,
+            title = title,
+            image = image
+        )
+    }
+}
 
 enum class PlanType {
     PUBLIC, PRIVATE, SECRET

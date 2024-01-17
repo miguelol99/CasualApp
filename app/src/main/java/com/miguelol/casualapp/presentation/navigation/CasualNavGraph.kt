@@ -18,6 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.FIRST_TIME
+import com.miguelol.casualapp.presentation.navigation.DestinationArgs.PLAN_ID
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.UID
 import com.miguelol.casualapp.presentation.navigation.Destinations.CREATE_PLAN_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Destinations.EDIT_PROFILE_ROUTE
@@ -26,10 +27,12 @@ import com.miguelol.casualapp.presentation.navigation.Destinations.MY_PLANS_ROUT
 import com.miguelol.casualapp.presentation.navigation.Destinations.REQUESTS_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Destinations.PLANS_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Destinations.MY_PROFILE_ROUTE
+import com.miguelol.casualapp.presentation.navigation.Destinations.PLAN_PROFILE_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Destinations.SEARCH_FRIENDS_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Destinations.SEARCH_USERS_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Destinations.USER_PROFILE_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Screens.EDIT_PROFILE_SCREEN
+import com.miguelol.casualapp.presentation.navigation.Screens.PLAN_PROFILE_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.PROFILE_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.SEARCH_FRIENDS_SCREEN
 import com.miguelol.casualapp.presentation.screens.createplan.CreatePlanScreen
@@ -46,6 +49,8 @@ import com.miguelol.casualapp.presentation.screens.plans.PlansScreen
 import com.miguelol.casualapp.presentation.screens.plans.PlansViewModel
 import com.miguelol.casualapp.presentation.screens.myprofile.MyProfileScreen
 import com.miguelol.casualapp.presentation.screens.myprofile.MyProfileViewModel
+import com.miguelol.casualapp.presentation.screens.planprofile.PlanProfileScreen
+import com.miguelol.casualapp.presentation.screens.planprofile.PlanProfileViewModel
 import com.miguelol.casualapp.presentation.screens.searchfriends.SearchFriendsScreen
 import com.miguelol.casualapp.presentation.screens.searchfriends.SearchFriendsUiState
 import com.miguelol.casualapp.presentation.screens.searchfriends.SearchFriendsViewModel
@@ -187,7 +192,9 @@ fun CasualNavGraph(
                 PlansScreen(
                     uiStateFlow = viewModel.uiState,
                     onEvent = viewModel::onEvent,
-                    onNavigateToPlanDetails =  { /*TODO*/}
+                    onNavigateToPlanDetails =  { planId ->
+                        navController.navigate("${PLAN_PROFILE_SCREEN}/$planId")
+                    }
                 )
             }
 
@@ -197,7 +204,9 @@ fun CasualNavGraph(
                     uiStateFlow = viewModel.uiState,
                     onEvent = viewModel::onEvent,
                     onNavigateToCreatePlan = { navController.navigate(CREATE_PLAN_ROUTE) },
-                    onNavigateToPlanDetails = {/*TODO*/}
+                    onNavigateToPlanDetails = {planId ->
+                        navController.navigate("${PLAN_PROFILE_SCREEN}/$planId")
+                    }
                 )
             }
 
@@ -221,6 +230,26 @@ fun CasualNavGraph(
                     onEvent = viewModel::onEvent,
                     onNavigateToProfile = { uid ->
                         navController.navigate("$PROFILE_SCREEN/$uid")
+                    }
+                )
+            }
+
+            composable(
+                route = PLAN_PROFILE_ROUTE,
+                arguments = listOf(navArgument(PLAN_ID) { type = NavType.StringType;})
+            ){
+                val viewModel: PlanProfileViewModel = hiltViewModel()
+                PlanProfileScreen(
+                    uiStateFlow = viewModel.uiState,
+                    onEvent = viewModel::onEvent,
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToProfile = { uid ->
+                        navController.navigate("$PROFILE_SCREEN/$uid")
+                    },
+                    onNavigateToMyProfile = {
+                        navController.navigate(PROFILE_SCREEN) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                        }
                     }
                 )
             }

@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miguelol.casualapp.domain.model.FriendState
+import com.miguelol.casualapp.domain.model.RequestState
 import com.miguelol.casualapp.domain.model.Response
 import com.miguelol.casualapp.domain.model.Success
 import com.miguelol.casualapp.domain.model.Error
@@ -14,7 +14,6 @@ import com.miguelol.casualapp.domain.usecases.FriendUseCases
 import com.miguelol.casualapp.domain.usecases.auth.AuthUseCases
 import com.miguelol.casualapp.domain.usecases.UserUseCases
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.UID
-import com.miguelol.casualapp.presentation.screens.myprofile.MyProfileEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,14 +28,14 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 data class UserProfileUiState(
-    val friendState: FriendState = FriendState.PENDING,
+    val friendState: RequestState = RequestState.PENDING,
     val user: User = User(),
     val isLoading: Boolean = false,
     var errorMessage: String? = null
 )
 
 sealed interface UserProfileEvents {
-    data class OnFollowButtonPressed(val friendState: FriendState): UserProfileEvents
+    data class OnFollowButtonPressed(val friendState: RequestState): UserProfileEvents
     object OnErrorMessageShown : UserProfileEvents
 }
 
@@ -54,7 +53,6 @@ class UserProfileViewModel @Inject constructor(
 
     private val _user = userUseCases.getUser(_profileUid)
     private val _friendState = friendRequestUseCases.getFriendState(_myUid, _profileUid)
-        .onEach { Log.d("EYY", "FRIEND STATE IS: $it") }
     private val _updateResponse = MutableStateFlow<Response<Unit>?>(null)
 
     val uiState = combine(_user, _friendState, _updateResponse) { user, friendState, update ->
@@ -86,13 +84,13 @@ class UserProfileViewModel @Inject constructor(
         }
     }
 
-    private fun onFollowButtonPressed(friendState: FriendState) {
+    private fun onFollowButtonPressed(friendState: RequestState) {
         Log.d("EYY", "BUTTON PRESSED")
         viewModelScope.launch {
             _updateResponse.value = when (friendState) {
-                FriendState.FOLLOWED -> friendUseCases.deleteFriend(_myUid, _profileUid)
-                FriendState.PENDING -> friendRequestUseCases.declineRequest(_myUid, _profileUid)
-                FriendState.NOT_FOLLOWED ->
+                RequestState.ACCEPTED -> friendUseCases.deleteFriend(_myUid, _profileUid)
+                RequestState.PENDING -> friendRequestUseCases.declineRequest(_myUid, _profileUid)
+                RequestState.NOT_SENT ->
                     friendRequestUseCases.createRequest(_myUid, _profileUid)
             }
         }

@@ -1,15 +1,12 @@
 package com.miguelol.casualapp.domain.usecases
 
+import com.miguelol.casualapp.domain.model.Error
 import com.miguelol.casualapp.domain.model.FriendRequest
 import com.miguelol.casualapp.domain.model.RequestState
 import com.miguelol.casualapp.domain.model.Response
 import com.miguelol.casualapp.domain.model.Success
-import com.miguelol.casualapp.domain.model.Error
-import com.miguelol.casualapp.domain.model.FriendState
 import com.miguelol.casualapp.domain.model.UserPreview
 import com.miguelol.casualapp.domain.repositories.FriendRequestRepository
-import com.miguelol.casualapp.domain.repositories.FriendsRepository
-import com.miguelol.casualapp.domain.repositories.UserRepository
 import com.miguelol.casualapp.utils.Constants.DATABASE_ERROR
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -17,12 +14,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import java.lang.Exception
 import javax.inject.Inject
 
 data class FriendRequestUseCases(
     val getFriendRequests: GetFriendRequests,
-    val getFriendRequest: GetFriendRequest,
     val acceptRequest: AcceptRequest,
     val declineRequest: DeclineRequest,
     val createRequest: CreateRequest,
@@ -32,16 +27,6 @@ data class FriendRequestUseCases(
 class GetFriendRequests @Inject constructor(private val requestRepo: FriendRequestRepository) {
     operator fun invoke(uid: String): Flow<Response<List<FriendRequest>>> =
         requestRepo.getFriendRequests(uid).map { resp ->
-            when(resp){
-                is Error -> Error(Exception(DATABASE_ERROR))
-                is Success -> resp
-            }
-        }
-}
-
-class GetFriendRequest @Inject constructor(private val requestRepo: FriendRequestRepository) {
-    operator fun invoke(fromUid: String, toUid: String): Flow<Response<FriendRequest?>> =
-        requestRepo.getFriendRequest(fromUid, toUid).map { resp ->
             when(resp){
                 is Error -> Error(Exception(DATABASE_ERROR))
                 is Success -> resp
@@ -121,18 +106,19 @@ class CreateRequest @Inject constructor(
         }
     }
 }
+
 class GetFriendState @Inject constructor(
     private val requestRepo: FriendRequestRepository,
     private val friendUseCases: FriendUseCases
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(myUid: String, otherUid: String): Flow<Response<FriendState>> {
+    operator fun invoke(myUid: String, otherUid: String): Flow<Response<RequestState>> {
 
         //checks if they are already friends
         return friendUseCases.getFriend(myUid, otherUid).flatMapLatest { resp ->
             when {
                 resp is Success && resp.data != null ->
-                    flowOf( Success(FriendState.FOLLOWED) )
+                    flowOf( Success(RequestState.ACCEPTED) )
 
                 //checks if there is a pending request
                 resp is Success && resp.data == null ->
@@ -140,10 +126,10 @@ class GetFriendState @Inject constructor(
                         when {
 
                             req is Success && req.data != null ->
-                                Success(FriendState.PENDING)
+                                Success(RequestState.PENDING)
 
                             req is Success && req.data == null ->
-                                Success(FriendState.NOT_FOLLOWED)
+                                Success(RequestState.NOT_SENT)
 
                             else -> Error((req as Error).e)
                         }

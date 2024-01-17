@@ -40,8 +40,7 @@ fun PlansScreen(
             CustomTopBar(title = uiState.topBarLabel) {
                 CustomDropdownMenu(
                     icon = R.drawable.round_filter_list_24,
-                    onPublicPlansSelected = { onEvent(PlansEvents.OnPublicFilter) },
-                    onPrivatePlansSelected = { onEvent(PlansEvents.OnPrivateFilter)}
+                    onEvent = onEvent
                 )
             }
         },

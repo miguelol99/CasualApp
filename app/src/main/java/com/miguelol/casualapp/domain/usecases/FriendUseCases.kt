@@ -4,16 +4,11 @@ package com.miguelol.casualapp.domain.usecases
 import com.miguelol.casualapp.domain.model.Response
 import com.miguelol.casualapp.domain.model.Success
 import com.miguelol.casualapp.domain.model.Error
-import com.miguelol.casualapp.domain.model.FriendState
 import com.miguelol.casualapp.domain.model.UserPreview
 import com.miguelol.casualapp.domain.repositories.FriendsRepository
-import com.miguelol.casualapp.domain.repositories.UserRepository
 import com.miguelol.casualapp.utils.Constants.DATABASE_ERROR
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 

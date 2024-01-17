@@ -8,27 +8,34 @@ import com.miguelol.casualapp.data.repositories.FriendRequestRepositoryImpl
 import com.miguelol.casualapp.data.repositories.FriendsRepositoryImpl
 import com.miguelol.casualapp.data.repositories.ImageRepositoryImpl
 import com.miguelol.casualapp.data.repositories.PlanRepositoryImpl
+import com.miguelol.casualapp.data.repositories.PlanRequestRepositoryImpl
 import com.miguelol.casualapp.data.repositories.UserRepositoryImpl
 import com.miguelol.casualapp.domain.repositories.AuthRepository
 import com.miguelol.casualapp.domain.repositories.FriendRequestRepository
 import com.miguelol.casualapp.domain.repositories.FriendsRepository
 import com.miguelol.casualapp.domain.repositories.ImageRepository
 import com.miguelol.casualapp.domain.repositories.PlanRepository
+import com.miguelol.casualapp.domain.repositories.PlanRequestRepository
 import com.miguelol.casualapp.domain.repositories.UserRepository
+import com.miguelol.casualapp.domain.usecases.AcceptPlanRequest
 import com.miguelol.casualapp.domain.usecases.AcceptRequest
 import com.miguelol.casualapp.domain.usecases.AddFriend
+import com.miguelol.casualapp.domain.usecases.CreatePlanRequest
 import com.miguelol.casualapp.domain.usecases.CreateRequest
 import com.miguelol.casualapp.domain.usecases.DeclineRequest
 import com.miguelol.casualapp.domain.usecases.DeleteFriend
+import com.miguelol.casualapp.domain.usecases.DeclinePlanRequest
 import com.miguelol.casualapp.domain.usecases.FriendRequestUseCases
 import com.miguelol.casualapp.domain.usecases.FriendUseCases
 import com.miguelol.casualapp.domain.usecases.GetFriend
-import com.miguelol.casualapp.domain.usecases.GetFriendRequest
 import com.miguelol.casualapp.domain.usecases.GetFriendRequests
 import com.miguelol.casualapp.domain.usecases.GetFriendState
 import com.miguelol.casualapp.domain.usecases.GetFriends
+import com.miguelol.casualapp.domain.usecases.GetPlanRequests
+import com.miguelol.casualapp.domain.usecases.GetRequestState
 import com.miguelol.casualapp.domain.usecases.GetUser
 import com.miguelol.casualapp.domain.usecases.IsUsernameTaken
+import com.miguelol.casualapp.domain.usecases.PlanRequestUseCases
 import com.miguelol.casualapp.domain.usecases.SearchUsers
 import com.miguelol.casualapp.domain.usecases.UpdateUser
 import com.miguelol.casualapp.domain.usecases.UserUseCases
@@ -37,10 +44,14 @@ import com.miguelol.casualapp.domain.usecases.auth.GetCurrentUser
 import com.miguelol.casualapp.domain.usecases.auth.LogIn
 import com.miguelol.casualapp.domain.usecases.images.ImageUseCases
 import com.miguelol.casualapp.domain.usecases.images.SaveImage
+import com.miguelol.casualapp.domain.usecases.plans.AddParticipant
 import com.miguelol.casualapp.domain.usecases.plans.CreatePlan
+import com.miguelol.casualapp.domain.usecases.plans.DeleteParticipant
 import com.miguelol.casualapp.domain.usecases.plans.FilterPlans
-import com.miguelol.casualapp.domain.usecases.plans.GetPlans
 import com.miguelol.casualapp.domain.usecases.plans.GetMyPlans
+import com.miguelol.casualapp.domain.usecases.plans.GetParticipants
+import com.miguelol.casualapp.domain.usecases.plans.GetPlan
+import com.miguelol.casualapp.domain.usecases.plans.GetPlans
 import com.miguelol.casualapp.domain.usecases.plans.PlanUseCases
 import dagger.Module
 import dagger.Provides
@@ -72,6 +83,8 @@ object AppModule {
     fun provideImageRepository(impl: ImageRepositoryImpl): ImageRepository = impl
     @Provides
     fun providePlanRepository(impl: PlanRepositoryImpl): PlanRepository = impl
+    @Provides
+    fun providePlanRequestRepository(impl: PlanRequestRepositoryImpl): PlanRequestRepository = impl
 
     //USE CASES
     @Provides
@@ -104,7 +117,6 @@ object AppModule {
     ) =
         FriendRequestUseCases(
             getFriendRequests = GetFriendRequests(requestRepo),
-            getFriendRequest = GetFriendRequest(requestRepo),
             acceptRequest = AcceptRequest(requestRepo, friendUseCases),
             declineRequest = DeclineRequest(requestRepo),
             createRequest = CreateRequest(requestRepo, friendUseCases, userUseCases),
@@ -130,8 +142,25 @@ object AppModule {
         imageUseCases: ImageUseCases
     ) = PlanUseCases(
         getPlans = GetPlans(planRepository),
+        getPlan = GetPlan(planRepository),
+        getParticipants = GetParticipants(planRepository),
         getMyPlans = GetMyPlans(planRepository),
         filterPlans = FilterPlans(),
-        createPlan = CreatePlan(planRepository, userUseCases, friendUseCases, imageUseCases)
+        createPlan = CreatePlan(planRepository, userUseCases, friendUseCases, imageUseCases),
+        deleteParticipant = DeleteParticipant(planRepository),
+        addParticipant = AddParticipant(planRepository, userUseCases)
+    )
+
+    @Provides
+    fun providePlanRequestsUseCases(
+        requestRepository: PlanRequestRepository,
+        planUseCases: PlanUseCases,
+        userUseCases: UserUseCases
+    ) = PlanRequestUseCases(
+        getRequests = GetPlanRequests(requestRepository),
+        getRequestState = GetRequestState(requestRepository, planUseCases),
+        createRequest = CreatePlanRequest(requestRepository, userUseCases, planUseCases ),
+        declineRequest = DeclinePlanRequest(requestRepository),
+        acceptRequest = AcceptPlanRequest(requestRepository, planUseCases)
     )
 }

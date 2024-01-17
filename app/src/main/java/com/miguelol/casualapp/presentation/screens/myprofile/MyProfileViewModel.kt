@@ -3,7 +3,6 @@ package com.miguelol.casualapp.presentation.screens.myprofile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miguelol.casualapp.domain.model.Error
-import com.miguelol.casualapp.domain.model.FriendState
 import com.miguelol.casualapp.domain.model.Success
 import com.miguelol.casualapp.domain.model.User
 import com.miguelol.casualapp.domain.usecases.UserUseCases

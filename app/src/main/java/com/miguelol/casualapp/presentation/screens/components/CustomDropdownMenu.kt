@@ -20,13 +20,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.miguelol.casualapp.R
 import com.miguelol.casualapp.presentation.components.CustomTopBar
+import com.miguelol.casualapp.presentation.screens.plans.FilterType
+import com.miguelol.casualapp.presentation.screens.plans.PlansEvents
 import com.miguelol.casualapp.presentation.theme.CasualAppTheme
 
 @Composable
 fun CustomDropdownMenu(
     icon: Int,
-    onPublicPlansSelected: () -> Unit,
-    onPrivatePlansSelected: () -> Unit
+    onEvent: (PlansEvents) -> Unit
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -46,14 +47,19 @@ fun CustomDropdownMenu(
                 .wrapContentSize(Alignment.TopEnd)
         ) {
             DropdownMenuItem(
+                text = { Text(text = "All") },
+                leadingIcon = { Icon(painter = painterResource(id = R.drawable.round_groups_24), contentDescription = null) },
+                onClick = { onEvent(PlansEvents.OnChangeFilter(FilterType.ALL)); expanded = !expanded }
+            )
+            DropdownMenuItem(
                 text = { Text(text = "Public") },
                 leadingIcon = { Icon(painter = painterResource(id = R.drawable.round_public_24), contentDescription = null) },
-                onClick = { onPublicPlansSelected(); expanded = !expanded }
+                onClick = { onEvent(PlansEvents.OnChangeFilter(FilterType.PUBLIC)); expanded = !expanded }
             )
             DropdownMenuItem(
                 text = { Text(text = "Private") },
                 leadingIcon = { Icon(painter = painterResource(id = R.drawable.outline_shield_24), contentDescription = null) },
-                onClick = { onPrivatePlansSelected(); expanded = !expanded }
+                onClick = { onEvent(PlansEvents.OnChangeFilter(FilterType.PRIVATE)); expanded = !expanded }
             )
         }
     }
@@ -68,8 +74,7 @@ fun PreviewCustomDropdownMenu() {
         ) {
             CustomDropdownMenu(
                 icon = R.drawable.round_filter_list_24,
-                onPublicPlansSelected = {},
-                onPrivatePlansSelected = {}
+                onEvent = {}
             )
         }
     }

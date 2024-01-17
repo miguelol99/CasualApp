@@ -82,6 +82,8 @@ class FriendsRepositoryImpl @Inject constructor(
                 val userRef1 = usersRef.document(uid1)
                 val userRef2 = usersRef.document(uid2)
 
+                usersRef.whereArrayContainsAny(uid1, listOf(""))
+
                 val friendRef1 = userRef1.collection(FRIENDS).document(uid2)
                 val friendRef2 = userRef2.collection(FRIENDS).document(uid1)
 

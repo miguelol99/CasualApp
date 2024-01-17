@@ -46,7 +46,7 @@ private val CustomColorScheme = lightColorScheme(
     //  errorContainer = ,
     //  onErrorContainer = ,
     //  outline = ,
-    //  outlineVariant = ,
+    outlineVariant = PowderBlue,
     //  scrim: Color
 )
 

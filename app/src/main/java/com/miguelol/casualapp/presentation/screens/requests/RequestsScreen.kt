@@ -14,7 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miguelol.casualapp.R
 import com.miguelol.casualapp.domain.model.FriendRequest
-import com.miguelol.casualapp.domain.model.RequestState
+import com.miguelol.casualapp.domain.model.PlanPreview
+import com.miguelol.casualapp.domain.model.PlanRequest
 import com.miguelol.casualapp.domain.model.UserPreview
 import com.miguelol.casualapp.presentation.components.CustomProgressIndicator
 import com.miguelol.casualapp.presentation.components.CustomTopBar
@@ -72,15 +73,30 @@ fun RequestsScreen(
 fun PreviewNotificationsScreen() {
     CasualAppTheme {
         RequestsScreen(
-            uiStateFlow = MutableStateFlow(RequestsUiState(
-                requests = listOf(FriendRequest(
-                    fromUser = UserPreview(
-                        username = "marianocp7",
-                        name = "Mariano Conde Perez Saiz"
-                    ),
-                    state = RequestState.PENDING
+            uiStateFlow = MutableStateFlow(
+                RequestsUiState(
+                    requests = listOf(
+                        CombinedRequest.Friend(
+                            friendRequest = FriendRequest(
+                                fromUser = UserPreview(
+                                    username = "marianocp7",
+                                    name = "Mariano Conde"
+                                )
+                            )
+                        ),
+                        CombinedRequest.Plan(
+                            planRequest = PlanRequest(
+                                fromUser = UserPreview(
+                                    username = "pablogdr",
+                                    name = "Pablo García"
+                                ),
+                                plan = PlanPreview(
+                                    title = "Tomar unas cañas",
+                                )
+                            )
+                        )
                     )
-                ))
+                )
             ),
             onEvent = {},
             onNavigateToProfile = {}

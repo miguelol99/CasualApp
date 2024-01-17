@@ -9,6 +9,8 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.miguelol.casualapp.domain.model.FriendRequest
 import com.miguelol.casualapp.domain.model.Response
+import com.miguelol.casualapp.domain.model.Success
+import com.miguelol.casualapp.domain.model.Error
 import com.miguelol.casualapp.domain.repositories.FriendRequestRepository
 import com.miguelol.casualapp.utils.Constants
 import com.miguelol.casualapp.utils.Constants.FRIEND_REQUESTS
@@ -30,15 +32,15 @@ class FriendRequestRepositoryImpl @Inject constructor(
         return usersRef.document(uid).collection(FRIEND_REQUESTS)
             .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
             .snapshots()
-            .map<QuerySnapshot, Response<List<FriendRequest>>> { Response.Success(it.toObjects()) }
-            .catch { it.printStackTrace(); emit(Response.Error(Exception(it))) }
+            .map<QuerySnapshot, Response<List<FriendRequest>>> { Success(it.toObjects()) }
+            .catch { it.printStackTrace(); emit(Error(Exception(it))) }
     }
 
     override fun getFriendRequest(fromUid: String, toUid: String): Flow<Response<FriendRequest?>> =
         usersRef.document(toUid).collection(FRIEND_REQUESTS).document(fromUid)
             .snapshots()
-            .map<DocumentSnapshot, Response<FriendRequest?>> { Response.Success(it.toObject()) }
-            .catch { it.printStackTrace(); emit(Response.Error(Exception(it))) }
+            .map<DocumentSnapshot, Response<FriendRequest?>> { Success(it.toObject()) }
+            .catch { it.printStackTrace(); emit(Error(Exception(it))) }
 
     override suspend fun createFriendRequest(
         toUid: String,
@@ -50,10 +52,10 @@ class FriendRequestRepositoryImpl @Inject constructor(
                 .document(request.fromUser.uid)
                 .set(request)
                 .await()
-            Response.Success(Unit)
+            Success(Unit)
         } catch (e: Exception) {
             e.printStackTrace()
-            Response.Error(e)
+            Error(e)
         }
 
     override suspend fun deleteFriendRequest(fromUid: String, toUid: String): Response<Unit> =
@@ -65,9 +67,9 @@ class FriendRequestRepositoryImpl @Inject constructor(
                 batch.delete(requestRef1)
                 batch.delete(requestRef2)
             }.await()
-            Response.Success(Unit)
+            Success(Unit)
         } catch (e: Exception) {
             e.printStackTrace()
-            Response.Error(e)
+            Error(e)
         }
 }

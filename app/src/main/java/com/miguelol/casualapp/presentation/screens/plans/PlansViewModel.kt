@@ -1,11 +1,13 @@
 package com.miguelol.casualapp.presentation.screens.plans
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miguelol.casualapp.domain.model.Plan
 import com.miguelol.casualapp.domain.model.Success
 import com.miguelol.casualapp.domain.model.Error
+import com.miguelol.casualapp.domain.model.PlanType
 import com.miguelol.casualapp.domain.usecases.auth.AuthUseCases
 import com.miguelol.casualapp.domain.usecases.plans.PlanUseCases
 import com.miguelol.casualapp.utils.Constants.ALL
@@ -20,13 +22,12 @@ import javax.inject.Inject
 data class PlansUiState(
     val plans: List<Plan> = emptyList(),
     val isLoading: Boolean = false,
-    val topBarLabel: String = "All plans",
+    val topBarLabel: String = FilterType.ALL.label,
     var errorMessage: String? = null
 )
 
 sealed interface PlansEvents {
-    object OnPublicFilter: PlansEvents
-    object OnPrivateFilter: PlansEvents
+    data class OnChangeFilter(val type: FilterType): PlansEvents
     object OnErrorMessageShown: PlansEvents
 }
 
@@ -40,19 +41,15 @@ class PlansViewModel @Inject constructor(
     private val uid: String = authUseCases.getCurrentUser()?.uid!!
 
     private val _plans = planUseCases.getPlans(uid) //TODO ESTO SOLO TRAE PLANES PUBLICOS
-    private val _filterType = savedStateHandle.getStateFlow(TYPE, ALL)
+    private val _filterType = savedStateHandle.getStateFlow(TYPE, FilterType.ALL)
 
     var uiState = combine(_plans, _filterType) { plans, type ->
-
         when(plans) {
             is Error -> PlansUiState(isLoading = true, errorMessage = plans.e.message)
             is Success -> {
                 PlansUiState(
                     plans = planUseCases.filterPlans(plans.data, type),
-                    topBarLabel = when(type) {
-                        ALL -> "All plans"
-                        else -> "Private plans"
-                    }
+                    topBarLabel = type.label
                 )
             }
         }
@@ -64,15 +61,17 @@ class PlansViewModel @Inject constructor(
 
     fun onEvent(event: PlansEvents) {
         when(event) {
-            PlansEvents.OnPrivateFilter -> setFiltering(PRIVATE)
-            PlansEvents.OnPublicFilter -> setFiltering(ALL)
+            is PlansEvents.OnChangeFilter -> setFiltering(event.type)
             PlansEvents.OnErrorMessageShown -> uiState.value.errorMessage = null
         }
     }
 
-    private fun setFiltering(requestType: String) {
-        savedStateHandle[TYPE] = requestType
+    private fun setFiltering(type: FilterType) {
+        Log.d("FILTER", "$type")
+        savedStateHandle[TYPE] = type
     }
+}
 
-
+enum class FilterType(val label: String) {
+    ALL("All plans"), PUBLIC("Public Plans"), PRIVATE("Private Plans")
 }

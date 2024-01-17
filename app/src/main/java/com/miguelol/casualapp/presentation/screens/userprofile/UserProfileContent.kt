@@ -14,8 +14,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,11 +26,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.miguelol.casualapp.R
-import com.miguelol.casualapp.domain.model.FriendState
+import com.miguelol.casualapp.domain.model.RequestState
 import com.miguelol.casualapp.domain.model.User
 import com.miguelol.casualapp.presentation.screens.components.CustomAsyncImage
 import com.miguelol.casualapp.presentation.screens.components.CustomIcon
 import com.miguelol.casualapp.presentation.theme.CasualAppTheme
+import com.miguelol.casualapp.presentation.theme.PowderBlue
 
 @Composable
 fun UserProfileContent(
@@ -82,14 +83,16 @@ fun UserProfileContent(
                         maxLines = 2
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    OutlinedButton(
-                        onClick = { onNavigateToFriendList(uiState.user.uid) }
+                    Button(
+                        onClick = { onNavigateToFriendList(uiState.user.uid) },
+                        colors = ButtonDefaults.buttonColors(containerColor = PowderBlue)
                     ) {
-                        Text(text = uiState.user.friendCount.toString(), color = MaterialTheme.colorScheme.onBackground)
+                        Text(text = uiState.user.friendCount.toString())
                         Spacer(modifier = Modifier.width(2.dp))
                         CustomIcon(
                             modifier = Modifier.size(24.dp),
                             icon = R.drawable.round_person_24,
+                            color = MaterialTheme.colorScheme.background
                         )
                     }
                 }
@@ -102,18 +105,20 @@ fun UserProfileContent(
         }
         Column(modifier = Modifier.padding(16.dp)) {
             when(uiState.friendState) {
-                FriendState.FOLLOWED ->
-                    OutlinedButton(
+                RequestState.ACCEPTED ->
+                    Button(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { onEvent(UserProfileEvents.OnFollowButtonPressed(uiState.friendState))}
+                        onClick = { onEvent(UserProfileEvents.OnFollowButtonPressed(uiState.friendState))},
+                        colors = ButtonDefaults.buttonColors(containerColor = PowderBlue)
                     ) { Text("Followed") }
 
-                FriendState.PENDING ->
-                    OutlinedButton(
+                RequestState.PENDING ->
+                    Button(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { onEvent(UserProfileEvents.OnFollowButtonPressed(uiState.friendState))}
+                        onClick = { onEvent(UserProfileEvents.OnFollowButtonPressed(uiState.friendState))},
+                        colors = ButtonDefaults.buttonColors(containerColor = PowderBlue)
                     ) { Text("Pending") }
-                FriendState.NOT_FOLLOWED ->
+                RequestState.NOT_SENT ->
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = { onEvent(UserProfileEvents.OnFollowButtonPressed(uiState.friendState))}
@@ -131,7 +136,7 @@ fun PreviewProfileContent() {
         UserProfileContent(
             modifier = Modifier,
             uiState = UserProfileUiState(
-                friendState = FriendState.FOLLOWED,
+                friendState = RequestState.ACCEPTED,
                 user = User(
                     name = "Miguel Antonio",
                     username = "miguelol_99",

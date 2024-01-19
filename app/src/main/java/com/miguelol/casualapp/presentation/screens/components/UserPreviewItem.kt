@@ -24,14 +24,14 @@ import com.miguelol.casualapp.presentation.theme.PowderBlue
 
 @Composable
 fun UserPreviewItem(
+    modifier: Modifier = Modifier,
     user: UserPreview,
     onClick: (String) -> Unit
 ) {
-    Column(modifier = Modifier.clickable { onClick(user.uid) }) {
+    Column(modifier = modifier.clickable { onClick(user.uid) }) {
         Row(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .fillMaxWidth()
                 .height(64.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -46,15 +46,13 @@ fun UserPreviewItem(
             Column() {
                 Text(
                     text = user.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.fillMaxWidth()
+                    style = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(3.dp))
                 Text(
                     text = "@${user.username}",
                     style = MaterialTheme.typography.titleSmall,
                     color = PowderBlue,
-                    modifier = Modifier.fillMaxWidth()
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))

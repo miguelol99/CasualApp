@@ -25,7 +25,8 @@ fun RequestsContent(
     modifier: Modifier = Modifier,
     uiState: RequestsUiState,
     onEvent: (RequestsEvents) -> Unit,
-    onNavigateToProfile: (String) -> Unit
+    onNavigateToProfile: (String) -> Unit,
+    onNavigateToPlan: (String) -> Unit
 ) {
 
     LazyColumn(
@@ -50,7 +51,8 @@ fun RequestsContent(
                     request = request.planRequest,
                     onAccept = { onEvent(RequestsEvents.OnAccept(request)) },
                     onDecline = { onEvent(RequestsEvents.OnDecline(request)) },
-                    onClick = { onNavigateToProfile(request.planRequest.fromUser.uid) }
+                    onNavigateToProfile = { onNavigateToProfile(request.planRequest.fromUser.uid) },
+                    onNavigateToPlan = { onNavigateToPlan(request.planRequest.plan.id) }
                 )
             }
 
@@ -89,7 +91,8 @@ fun PreviewRequestsContent() {
                 )
             ),
             onEvent = {},
-            onNavigateToProfile = {}
+            onNavigateToProfile = {},
+            onNavigateToPlan = {}
         )
     }
 }

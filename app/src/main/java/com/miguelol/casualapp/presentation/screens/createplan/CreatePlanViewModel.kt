@@ -7,7 +7,6 @@ import com.miguelol.casualapp.domain.model.Plan
 import com.miguelol.casualapp.domain.model.PlanType
 import com.miguelol.casualapp.domain.model.Success
 import com.miguelol.casualapp.domain.model.Error
-import com.miguelol.casualapp.domain.model.UserPreview
 import com.miguelol.casualapp.domain.usecases.auth.AuthUseCases
 import com.miguelol.casualapp.domain.usecases.plans.PlanUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -55,7 +54,7 @@ class CreatePlanViewModel @Inject constructor(
     private val planUseCases: PlanUseCases
 ) : ViewModel() {
 
-    private val uid = authUseCases.getCurrentUser()?.uid!!
+    private val _myUid = authUseCases.getCurrentUser()?.uid!!
 
     private val _inputs = MutableStateFlow(CreatePlanInputs())
     private val _errors = _inputs.debounce(500L).mapLatest { checkInputs(it) }
@@ -112,12 +111,13 @@ class CreatePlanViewModel @Inject constructor(
                 image = it.image,
                 type = it.type,
                 title = it.title,
+                description = it.description,
                 datetime = parseTimestamp(it.date, it.time),
                 location = it.location
             )
         }
 
-        when (val resp = planUseCases.createPlan(plan, uid)) {
+        when (val resp = planUseCases.createPlan(plan, _myUid)) {
             is Error -> {_isLoading.update { false }; _message.update { resp.e.message }}
             is Success -> _planCreated.update { true }
         }

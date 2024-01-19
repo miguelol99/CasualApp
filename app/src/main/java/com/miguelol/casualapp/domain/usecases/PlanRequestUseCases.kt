@@ -53,7 +53,7 @@ class CreatePlanRequest @Inject constructor(
         val plan: PlanPreview
         when(val resp = planUseCases.getPlan(planId).first()){
             is Error -> return Error(Exception(DATABASE_ERROR))
-            is Success -> plan = resp.data.toPreview()
+            is Success -> plan = resp.data!!.toPreview()
         }
 
         val requestId = "$fromUid$planId"

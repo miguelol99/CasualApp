@@ -42,7 +42,7 @@ val items = listOf(
     ),
     CustomNavigationItem(
         route = REQUESTS_SCREEN,
-        title = "Notifications",
+        title = "Requests",
         selectedIcon = R.drawable.round_circle_notifications_24,
         unselectedIcon = R.drawable.outline_circle_notifications_24
     ),

@@ -6,6 +6,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.miguelol.casualapp.presentation.theme.PowderBlue
 
 @Composable
 fun CustomDivider(
@@ -13,6 +14,7 @@ fun CustomDivider(
 ) {
 
     Divider(
-        modifier = modifier.fillMaxWidth().padding(vertical = 4.dp)
+        modifier = modifier.fillMaxWidth().padding(vertical = 4.dp),
+        color = PowderBlue
     )
 }

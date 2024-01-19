@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 
 val Gamboge = Color(238, 155, 0)
+val GambageDark = Color(95, 62, 0, 255)
 val RaisinBlack = Color(31, 38, 50)
 val PrussianBlue = Color(33, 48, 69)
 val IndigoDye = Color(40, 58, 83)

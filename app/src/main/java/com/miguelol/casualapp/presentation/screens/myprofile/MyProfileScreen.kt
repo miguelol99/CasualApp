@@ -45,7 +45,7 @@ fun MyProfileScreen(
                         CustomIcon(icon = R.drawable.round_person_search_24)
                     }
                     IconButton(onClick = { onNavigateToEditProfile() }) {
-                        CustomIcon(icon = R.drawable.round_edit_24)
+                        CustomIcon(icon = R.drawable.round_settings_24)
                     }
                 }
             )

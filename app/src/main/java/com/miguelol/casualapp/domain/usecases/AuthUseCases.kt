@@ -9,7 +9,8 @@ import javax.inject.Inject
 
 data class AuthUseCases(
     val getCurrentUser: GetCurrentUser,
-    val logIn: LogIn
+    val logIn: LogIn,
+    val signOut: SignOut
 )
 
 class LogIn @Inject constructor(private val authRepository: AuthRepository) {
@@ -19,6 +20,9 @@ class LogIn @Inject constructor(private val authRepository: AuthRepository) {
 }
 
 class GetCurrentUser @Inject constructor(private val authRepository: AuthRepository) {
-
     operator fun invoke(): FirebaseUser? = authRepository.currentUser
+}
+
+class SignOut @Inject constructor(private val authRepository: AuthRepository) {
+    operator fun invoke(): Unit = authRepository.signOut
 }

@@ -11,9 +11,14 @@ import com.miguelol.casualapp.domain.model.Response
 import com.miguelol.casualapp.domain.model.User
 import com.miguelol.casualapp.domain.repositories.UserRepository
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.UID
+import com.miguelol.casualapp.utils.Constants.CHAT
 import com.miguelol.casualapp.utils.Constants.FRIENDS
 import com.miguelol.casualapp.utils.Constants.FRIEND_REQUESTS
 import com.miguelol.casualapp.utils.Constants.FROM_USER
+import com.miguelol.casualapp.utils.Constants.HOST
+import com.miguelol.casualapp.utils.Constants.PARTICIPANTS
+import com.miguelol.casualapp.utils.Constants.PLANS
+import com.miguelol.casualapp.utils.Constants.PLAN_REQUESTS
 import com.miguelol.casualapp.utils.Constants.USERNAME
 import com.miguelol.casualapp.utils.Constants.USERS
 import kotlinx.coroutines.async
@@ -29,8 +34,12 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
 
     private val usersRef = database.collection(USERS)
-    private val friendsColRef = database.collectionGroup(FRIENDS)
-    private val requestsColRef = database.collectionGroup(FRIEND_REQUESTS)
+    private val friendsRef = database.collectionGroup(FRIENDS)
+    private val friendRequestsRef = database.collectionGroup(FRIEND_REQUESTS)
+    private val planRequestsRef = database.collectionGroup(PLAN_REQUESTS)
+    private val plansRef = database.collection(PLANS)
+    private val participantsRef = database.collectionGroup(PARTICIPANTS)
+    private val chatRef = database.collectionGroup(CHAT)
 
     override fun getUser(uid: String): Flow<Response<User?>> =
         usersRef.document(uid).snapshots()
@@ -54,18 +63,36 @@ class UserRepositoryImpl @Inject constructor(
         val uid = user.uid
         val preview = user.toPreview()
         return try {
+
             coroutineScope {
-                val friendsDef = async { friendsColRef.whereEqualTo(UID, uid).get().await() }
-                val requestsDef = async { requestsColRef.whereEqualTo("$FROM_USER.$UID", uid).get().await() }
+                val friendsDef = async { friendsRef.whereEqualTo(UID, uid).get().await() }
+                val friendRequestsDef = async { friendRequestsRef.whereEqualTo("$FROM_USER.$UID", uid).get().await() }
+                val planRequestsDef = async { planRequestsRef.whereEqualTo("$FROM_USER.$UID", uid).get().await() }
+
+                val plansDef = async { plansRef.whereEqualTo("$HOST.$UID", uid).get().await() }
+                val participantsDef = async { participantsRef.whereEqualTo(UID, uid).get().await() }
+                val chatDef = async { chatRef.whereEqualTo(UID, uid).get().await() }
 
                 val friends = friendsDef.await()
-                val requests = requestsDef.await()
+                val friendRequests = friendRequestsDef.await()
+                val planRequests = planRequestsDef.await()
+
+                val plans = plansDef.await()
+                val participants = participantsDef.await()
+                val chat = chatDef.await()
+
                 val userRef = usersRef.document(uid)
 
-                database.runBatch { batch ->
-                    friends.forEach { batch.update(it.reference, preview.toMap()) }
-                    requests.forEach { batch.update(it.reference, FROM_USER, preview.toMap()) }
-                    batch.update(userRef, user.toMap())
+                database.runTransaction { trans ->
+                    friends.forEach { trans.update(it.reference, preview.toMap()) }
+                    friendRequests.forEach { trans.update(it.reference, FROM_USER, preview.toMap()) }
+                    planRequests.forEach { trans.update(it.reference, FROM_USER, preview.toMap()) }
+
+                    plans.forEach { trans.update(it.reference, HOST,  preview.toMap()) }
+                    participants.forEach { trans.update(it.reference, preview.toMap()) }
+                    chat.forEach { trans.update(it.reference, FROM_USER, preview.toMap()) }
+
+                    trans.update(userRef, user.toMap())
                 }.await()
             }
             Response.Success(Unit)

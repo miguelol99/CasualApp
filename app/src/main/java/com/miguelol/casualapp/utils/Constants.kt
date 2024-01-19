@@ -11,6 +11,7 @@ object Constants {
     const val PARTICIPANTS = "participants"
     const val FRIENDS_OF_HOST = "friendsOfHost"
     const val HOST = "host"
+    const val CHAT = "chat"
 
 
     const val NAME = "name"

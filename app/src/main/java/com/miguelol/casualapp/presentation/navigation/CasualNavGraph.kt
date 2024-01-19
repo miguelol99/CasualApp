@@ -20,6 +20,7 @@ import androidx.navigation.navArgument
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.FIRST_TIME
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.PLAN_ID
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.UID
+import com.miguelol.casualapp.presentation.navigation.Destinations.CHAT_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Destinations.CREATE_PLAN_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Destinations.EDIT_PROFILE_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Destinations.LOGIN_ROUTE
@@ -31,10 +32,13 @@ import com.miguelol.casualapp.presentation.navigation.Destinations.PLAN_PROFILE_
 import com.miguelol.casualapp.presentation.navigation.Destinations.SEARCH_FRIENDS_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Destinations.SEARCH_USERS_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Destinations.USER_PROFILE_ROUTE
+import com.miguelol.casualapp.presentation.navigation.Screens.CHAT_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.EDIT_PROFILE_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.PLAN_PROFILE_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.PROFILE_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.SEARCH_FRIENDS_SCREEN
+import com.miguelol.casualapp.presentation.screens.chat.ChatScreen
+import com.miguelol.casualapp.presentation.screens.chat.ChatViewModel
 import com.miguelol.casualapp.presentation.screens.createplan.CreatePlanScreen
 import com.miguelol.casualapp.presentation.screens.createplan.CreatePlanViewModel
 import com.miguelol.casualapp.presentation.screens.editprofile.EditProfileScreen
@@ -183,6 +187,11 @@ fun CasualNavGraph(
                     onNavigateToProfileScreen = {
                         navController.popBackStack(EDIT_PROFILE_ROUTE, true)
                         navController.navigate(PROFILE_SCREEN)
+                    },
+                    onSignOut = {
+                        navController.navigate(LOGIN_ROUTE){
+                            popUpTo(navController.graph.findStartDestination().id)
+                        }
                     }
                 )
             }
@@ -193,7 +202,7 @@ fun CasualNavGraph(
                     uiStateFlow = viewModel.uiState,
                     onEvent = viewModel::onEvent,
                     onNavigateToPlanDetails =  { planId ->
-                        navController.navigate("${PLAN_PROFILE_SCREEN}/$planId")
+                        navController.navigate("${PLAN_PROFILE_SCREEN}/$planId/${false}")
                     }
                 )
             }
@@ -204,8 +213,8 @@ fun CasualNavGraph(
                     uiStateFlow = viewModel.uiState,
                     onEvent = viewModel::onEvent,
                     onNavigateToCreatePlan = { navController.navigate(CREATE_PLAN_ROUTE) },
-                    onNavigateToPlanDetails = {planId ->
-                        navController.navigate("${PLAN_PROFILE_SCREEN}/$planId")
+                    onNavigateToChat = { planId ->
+                        navController.navigate("${CHAT_SCREEN}/$planId")
                     }
                 )
             }
@@ -230,13 +239,20 @@ fun CasualNavGraph(
                     onEvent = viewModel::onEvent,
                     onNavigateToProfile = { uid ->
                         navController.navigate("$PROFILE_SCREEN/$uid")
+                    },
+                    onNavigateToPlan = { planId ->
+                        navController.navigate("${PLAN_PROFILE_SCREEN}/$planId/${false}")
                     }
                 )
             }
 
             composable(
                 route = PLAN_PROFILE_ROUTE,
-                arguments = listOf(navArgument(PLAN_ID) { type = NavType.StringType;})
+                arguments = listOf(
+                    navArgument(PLAN_ID) { type = NavType.StringType},
+                    navArgument("fromChat") {type = NavType.BoolType; defaultValue = false }
+                )
+
             ){
                 val viewModel: PlanProfileViewModel = hiltViewModel()
                 PlanProfileScreen(
@@ -250,7 +266,33 @@ fun CasualNavGraph(
                         navController.navigate(PROFILE_SCREEN) {
                             popUpTo(navController.graph.findStartDestination().id)
                         }
+                    },
+                    onNavigateToMyPlans = {
+                        //navController.popBackStack(PLAN_PROFILE_ROUTE, true)
+                        navController.navigate(MY_PLANS_ROUTE)
+                    },
+                    onNavigateToChat = {
+                        navController.popBackStack(PLAN_PROFILE_ROUTE, true)
+                        navController.navigate("${CHAT_SCREEN}/${it.arguments!!.getString(PLAN_ID)}")
                     }
+                )
+            }
+
+            composable(
+                route = CHAT_ROUTE,
+                arguments = listOf(navArgument(PLAN_ID) { type = NavType.StringType })
+            ) {
+                val viewModel: ChatViewModel = hiltViewModel()
+                ChatScreen(
+                    uiStateFlow = viewModel.uiState,
+                    onEvent = viewModel::onEvent,
+                    onNavigateToPlanProfile = {
+                        navController.navigate("${PLAN_PROFILE_SCREEN}/${it.arguments!!.getString(PLAN_ID)}/${true}")
+                    },
+                    onNavigateToMyPlans = {
+                        navController.navigate(MY_PLANS_ROUTE)
+                    },
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
 

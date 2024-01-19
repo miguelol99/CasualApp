@@ -42,17 +42,21 @@ import com.miguelol.casualapp.domain.usecases.UserUseCases
 import com.miguelol.casualapp.domain.usecases.auth.AuthUseCases
 import com.miguelol.casualapp.domain.usecases.auth.GetCurrentUser
 import com.miguelol.casualapp.domain.usecases.auth.LogIn
+import com.miguelol.casualapp.domain.usecases.auth.SignOut
 import com.miguelol.casualapp.domain.usecases.images.ImageUseCases
 import com.miguelol.casualapp.domain.usecases.images.SaveImage
 import com.miguelol.casualapp.domain.usecases.plans.AddParticipant
 import com.miguelol.casualapp.domain.usecases.plans.CreatePlan
 import com.miguelol.casualapp.domain.usecases.plans.DeleteParticipant
+import com.miguelol.casualapp.domain.usecases.plans.DeletePlan
 import com.miguelol.casualapp.domain.usecases.plans.FilterPlans
+import com.miguelol.casualapp.domain.usecases.plans.GetChat
 import com.miguelol.casualapp.domain.usecases.plans.GetMyPlans
 import com.miguelol.casualapp.domain.usecases.plans.GetParticipants
 import com.miguelol.casualapp.domain.usecases.plans.GetPlan
 import com.miguelol.casualapp.domain.usecases.plans.GetPlans
 import com.miguelol.casualapp.domain.usecases.plans.PlanUseCases
+import com.miguelol.casualapp.domain.usecases.plans.SendMessage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -90,7 +94,8 @@ object AppModule {
     @Provides
     fun provideAuthUseCases(authRepository: AuthRepository) = AuthUseCases(
         getCurrentUser = GetCurrentUser(authRepository),
-        logIn = LogIn(authRepository)
+        logIn = LogIn(authRepository),
+        signOut = SignOut(authRepository)
     )
     @Provides
     fun provideImageUseCases(imageRepo: ImageRepository) = ImageUseCases(
@@ -147,8 +152,11 @@ object AppModule {
         getMyPlans = GetMyPlans(planRepository),
         filterPlans = FilterPlans(),
         createPlan = CreatePlan(planRepository, userUseCases, friendUseCases, imageUseCases),
+        deletePlan = DeletePlan(planRepository),
         deleteParticipant = DeleteParticipant(planRepository),
-        addParticipant = AddParticipant(planRepository, userUseCases)
+        addParticipant = AddParticipant(planRepository, userUseCases),
+        getChat = GetChat(planRepository),
+        sendMessage = SendMessage(planRepository, userUseCases)
     )
 
     @Provides

@@ -35,7 +35,8 @@ data class EditProfileUiState(
     val birthDateError: String = "",
     val descriptionError: String = "",
     val errorMessage: String? = null,
-    val updated: Boolean = false
+    val updated: Boolean = false,
+    val signOut: Boolean = false
 )
 
 sealed interface EditProfileEvents {
@@ -45,12 +46,13 @@ sealed interface EditProfileEvents {
     data class OnDateOfBirthInput(val input: String) : EditProfileEvents
     data class OnImageInput(val input: String) : EditProfileEvents
     object OnErrorMessageShown : EditProfileEvents
+    object OnSignOut: EditProfileEvents
     object OnSave : EditProfileEvents
 }
 
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
-    authUseCases: AuthUseCases,
+    private val authUseCases: AuthUseCases,
     private val userUseCases: UserUseCases
 ) : ViewModel() {
 
@@ -70,6 +72,8 @@ class EditProfileViewModel @Inject constructor(
     private var _ageError = MutableStateFlow("")
     private var _descriptionError = MutableStateFlow("")
 
+    private val _signOut = MutableStateFlow(false)
+
     @OptIn(FlowPreview::class)
     val uiState = combine(
         _user,
@@ -79,7 +83,8 @@ class EditProfileViewModel @Inject constructor(
         _usernameError.debounce(500),
         _nameError.debounce(500),
         _ageError.debounce(500),
-        _descriptionError.debounce(500)
+        _descriptionError.debounce(500),
+        _signOut
     ) { values ->
         val user = values[0] as User?
         val error = values[1] as String?
@@ -89,6 +94,7 @@ class EditProfileViewModel @Inject constructor(
         val nameErr = values[5] as String
         val ageErr = values[6] as String
         val descriptionErr = values[7] as String
+        val signOut = values[8] as Boolean
 
         EditProfileUiState(
             user = user ?: User(),
@@ -98,7 +104,8 @@ class EditProfileViewModel @Inject constructor(
             nameError = nameErr,
             birthDateError = ageErr,
             descriptionError = descriptionErr,
-            updated = updated
+            updated = updated,
+            signOut = signOut
         )
     }.stateIn(
         scope = viewModelScope,
@@ -130,6 +137,7 @@ class EditProfileViewModel @Inject constructor(
             is EditProfileEvents.OnImageInput -> onImageInput(event.input)
             is EditProfileEvents.OnSave -> onSave()
             is EditProfileEvents.OnErrorMessageShown -> _error.update { null }
+            is EditProfileEvents.OnSignOut -> _signOut.update { authUseCases.signOut(); true }
         }
     }
 

@@ -20,7 +20,7 @@ import com.miguelol.casualapp.presentation.theme.CasualAppTheme
 fun MyPlansContent(
     modifier: Modifier = Modifier,
     uiState: MyPlansUiState,
-    onNavigateToPlanDetails: (String) -> Unit
+    onNavigateToChat: (String) -> Unit
 ) {
 
 
@@ -34,7 +34,7 @@ fun MyPlansContent(
         ) { plan ->
             PlanItem(
                 plan = plan,
-                onClick = onNavigateToPlanDetails
+                onClick = onNavigateToChat
             )
             Spacer(modifier = Modifier.height(12.dp))
         }
@@ -56,7 +56,7 @@ fun PreviewPlansContent() {
                     )
                 )
             ),
-            onNavigateToPlanDetails = {}
+            onNavigateToChat = {}
         )
     }
 }

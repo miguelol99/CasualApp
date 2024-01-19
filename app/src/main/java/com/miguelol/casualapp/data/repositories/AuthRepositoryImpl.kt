@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.toObject
 import com.miguelol.casualapp.domain.model.Response
+import com.miguelol.casualapp.domain.model.Success
 import com.miguelol.casualapp.domain.model.User
 import com.miguelol.casualapp.domain.repositories.AuthRepository
 import kotlinx.coroutines.tasks.await
@@ -16,6 +17,7 @@ class AuthRepositoryImpl @Inject constructor(
     ) : AuthRepository {
 
     override val currentUser: FirebaseUser? get() = firebaseAuth.currentUser
+    override val signOut: Unit get() =  firebaseAuth.signOut()
 
     override suspend fun login(email: String, password: String): Response<FirebaseUser?> {
         return try {
@@ -26,4 +28,5 @@ class AuthRepositoryImpl @Inject constructor(
             Response.Error(e)
         }
     }
+
 }

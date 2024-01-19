@@ -29,7 +29,8 @@ import kotlinx.coroutines.flow.StateFlow
 fun RequestsScreen(
     uiStateFlow: StateFlow<RequestsUiState>,
     onEvent: (RequestsEvents) -> Unit,
-    onNavigateToProfile: (String) -> Unit
+    onNavigateToProfile: (String) -> Unit,
+    onNavigateToPlan: (String) -> Unit
 ) {
     val uiState by uiStateFlow.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -45,17 +46,16 @@ fun RequestsScreen(
 
         when {
             uiState.isLoading -> CustomProgressIndicator()
-            uiState.requests.isEmpty() ->
-                CustomEmptyIcon(
-                    icon = R.drawable.round_person_24,
-                    text = "You have no requests"
-                )
-            else ->
-                RequestsContent(
+            uiState.requests.isEmpty() -> CustomEmptyIcon(
+                icon = R.drawable.round_person_24,
+                text = "You have no requests"
+            )
+            else -> RequestsContent(
                 modifier = Modifier.padding(padding),
                 uiState = uiState,
                 onEvent = onEvent,
-                onNavigateToProfile = onNavigateToProfile
+                onNavigateToProfile = onNavigateToProfile,
+                onNavigateToPlan = onNavigateToPlan
             )
         }
 
@@ -99,7 +99,8 @@ fun PreviewNotificationsScreen() {
                 )
             ),
             onEvent = {},
-            onNavigateToProfile = {}
+            onNavigateToProfile = {},
+            onNavigateToPlan = {}
         )
     }
 }

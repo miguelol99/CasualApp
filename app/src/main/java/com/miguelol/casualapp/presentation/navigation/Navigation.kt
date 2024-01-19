@@ -4,6 +4,7 @@ import androidx.navigation.NavHostController
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.PLAN_ID
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.UID
 import com.miguelol.casualapp.presentation.navigation.Destinations.PLANS_ROUTE
+import com.miguelol.casualapp.presentation.navigation.Screens.CHAT_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.CREATE_PLAN_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.EDIT_PROFILE_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.LOGIN_SCREEN
@@ -26,6 +27,7 @@ object Screens {
     const val REQUESTS_SCREEN = "requests"
     const val LOGIN_SCREEN = "login"
     const val PLAN_PROFILE_SCREEN = "plan_profile"
+    const val CHAT_SCREEN = "chat"
 }
 
 object DestinationArgs {
@@ -46,7 +48,8 @@ object Destinations {
     const val CREATE_PLAN_ROUTE = CREATE_PLAN_SCREEN
     const val MY_PLANS_ROUTE = MY_PLANS_SCREEN
     const val REQUESTS_ROUTE = REQUESTS_SCREEN
-    const val PLAN_PROFILE_ROUTE = "$PLAN_PROFILE_SCREEN/{$PLAN_ID}"
+    const val PLAN_PROFILE_ROUTE = "$PLAN_PROFILE_SCREEN/{$PLAN_ID}/{fromChat}?"
+    const val CHAT_ROUTE = "$CHAT_SCREEN/{$PLAN_ID}"
 }
 
 class NavigationActions(private val navController: NavHostController) {

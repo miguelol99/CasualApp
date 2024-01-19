@@ -6,6 +6,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,7 +31,8 @@ import kotlinx.coroutines.launch
 fun EditProfileScreen(
     uiStateFlow: StateFlow<EditProfileUiState>,
     onEvent: (EditProfileEvents) -> Unit,
-    onNavigateToProfileScreen: () -> Unit
+    onNavigateToProfileScreen: () -> Unit,
+    onSignOut: () -> Unit
 ) {
 
     val uiState by uiStateFlow.collectAsStateWithLifecycle()
@@ -42,7 +45,12 @@ fun EditProfileScreen(
             CustomTopBar(
                 title = "Profile Settings",
                 navigateBack = true,
-                onNavigateBack = { onNavigateToProfileScreen() })
+                onNavigateBack = { onNavigateToProfileScreen() }
+            ) {
+                TextButton(onClick = {onEvent(EditProfileEvents.OnSignOut) }) {
+                    Text(text = "Sign Out")
+                }
+            }
         },
         floatingActionButton = {
             CustomFloatingActionButton(
@@ -80,6 +88,10 @@ fun EditProfileScreen(
         LaunchedEffect(Unit) { onNavigateToProfileScreen() }
     }
 
+    if (uiState.signOut){
+        LaunchedEffect(Unit) { onSignOut() }
+    }
+
 }
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -89,7 +101,8 @@ fun PreviewEditProfileScreen() {
         EditProfileScreen(
             uiStateFlow = MutableStateFlow(EditProfileUiState()),
             onEvent = {},
-            onNavigateToProfileScreen = {}
+            onNavigateToProfileScreen = {},
+            onSignOut = {}
         )
     }
 }

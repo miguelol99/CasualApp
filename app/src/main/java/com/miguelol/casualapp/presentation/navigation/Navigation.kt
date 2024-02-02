@@ -1,18 +1,16 @@
 package com.miguelol.casualapp.presentation.navigation
 
-import androidx.navigation.NavHostController
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.PLAN_ID
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.UID
-import com.miguelol.casualapp.presentation.navigation.Destinations.PLANS_ROUTE
 import com.miguelol.casualapp.presentation.navigation.Screens.CHAT_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.CREATE_PLAN_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.EDIT_PROFILE_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.LOGIN_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.MY_PLANS_SCREEN
-import com.miguelol.casualapp.presentation.navigation.Screens.REQUESTS_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.PLANS_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.PLAN_PROFILE_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.PROFILE_SCREEN
+import com.miguelol.casualapp.presentation.navigation.Screens.REQUESTS_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.SEARCH_FRIENDS_SCREEN
 import com.miguelol.casualapp.presentation.navigation.Screens.SEARCH_USERS_SCREEN
 
@@ -50,30 +48,4 @@ object Destinations {
     const val REQUESTS_ROUTE = REQUESTS_SCREEN
     const val PLAN_PROFILE_ROUTE = "$PLAN_PROFILE_SCREEN/{$PLAN_ID}/{fromChat}?"
     const val CHAT_ROUTE = "$CHAT_SCREEN/{$PLAN_ID}"
-}
-
-class NavigationActions(private val navController: NavHostController) {
-
-    fun navigateBack() {
-        navController.popBackStack()
-    }
-
-    fun navigateToProfile(uid: String?, fromNavBar: Boolean = false) {
-        val destination = if (uid == null) PROFILE_SCREEN else "$PROFILE_SCREEN/$uid"
-
-
-        navController.navigate(destination) {
-
-        }
-
-        navController.navigate("$PROFILE_SCREEN/$uid") {
-            popUpTo(navController.graph.startDestinationId) { inclusive = true }
-            launchSingleTop = true
-        }
-    }
-
-    fun navigateToPlans() {
-        navController.popBackStack(navController.graph.startDestinationId, true)
-        navController.navigate(PLANS_ROUTE) { launchSingleTop = true }
-    }
 }

@@ -5,15 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import coil.Coil
 import coil.ImageLoader
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.miguelol.casualapp.presentation.navigation.CasualNavGraph
-import com.miguelol.casualapp.presentation.navigation.Destinations.LOGIN_ROUTE
-import com.miguelol.casualapp.presentation.navigation.Destinations.PLANS_ROUTE
 import com.miguelol.casualapp.presentation.theme.CasualAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,15 +41,5 @@ class MainActivity : ComponentActivity() {
             val token = task.result
             println("Token : $token")
         }
-    }
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CasualAppTheme {
-        CasualNavGraph()
     }
 }

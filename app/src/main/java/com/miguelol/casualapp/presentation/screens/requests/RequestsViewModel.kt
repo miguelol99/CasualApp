@@ -7,8 +7,8 @@ import com.miguelol.casualapp.domain.model.FriendRequest
 import com.miguelol.casualapp.domain.model.PlanRequest
 import com.miguelol.casualapp.domain.model.Response
 import com.miguelol.casualapp.domain.model.Success
-import com.miguelol.casualapp.domain.usecases.FriendRequestUseCases
-import com.miguelol.casualapp.domain.usecases.PlanRequestUseCases
+import com.miguelol.casualapp.domain.usecases.friendRequests.FriendRequestUseCases
+import com.miguelol.casualapp.domain.usecases.planRequests.PlanRequestUseCases
 import com.miguelol.casualapp.domain.usecases.auth.AuthUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

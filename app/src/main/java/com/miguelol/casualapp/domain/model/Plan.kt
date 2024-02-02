@@ -1,7 +1,6 @@
 package com.miguelol.casualapp.domain.model
 
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
 
 data class Plan(
@@ -26,6 +25,8 @@ data class Plan(
     }
 }
 
-enum class PlanType {
-    PUBLIC, PRIVATE, SECRET
-}
+data class PlanPreview(
+    val id: String = "",
+    val title: String = "",
+    val image: String = ""
+)

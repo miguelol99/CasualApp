@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.miguelol.casualapp.domain.model.FriendRequest
-import com.miguelol.casualapp.domain.model.PlanPreview
 import com.miguelol.casualapp.domain.model.PlanRequest
 import com.miguelol.casualapp.domain.model.UserPreview
 import com.miguelol.casualapp.presentation.screens.components.FriendRequestItem

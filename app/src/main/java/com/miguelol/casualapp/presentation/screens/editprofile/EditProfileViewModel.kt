@@ -1,14 +1,12 @@
 package com.miguelol.casualapp.presentation.screens.editprofile
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miguelol.casualapp.domain.model.Response
 import com.miguelol.casualapp.domain.model.Success
 import com.miguelol.casualapp.domain.model.Error
 import com.miguelol.casualapp.domain.model.User
 import com.miguelol.casualapp.domain.usecases.auth.AuthUseCases
-import com.miguelol.casualapp.domain.usecases.UserUseCases
+import com.miguelol.casualapp.domain.usecases.users.UserUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow

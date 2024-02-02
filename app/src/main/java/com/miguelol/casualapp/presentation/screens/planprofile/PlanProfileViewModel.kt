@@ -8,9 +8,8 @@ import com.miguelol.casualapp.domain.model.RequestState
 import com.miguelol.casualapp.domain.model.Response.Error
 import com.miguelol.casualapp.domain.model.Response.Success
 import com.miguelol.casualapp.domain.model.UserPreview
-import com.miguelol.casualapp.domain.usecases.PlanRequestUseCases
+import com.miguelol.casualapp.domain.usecases.planRequests.PlanRequestUseCases
 import com.miguelol.casualapp.domain.usecases.auth.AuthUseCases
-import com.miguelol.casualapp.domain.usecases.plans.AddParticipant
 import com.miguelol.casualapp.domain.usecases.plans.PlanUseCases
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.PLAN_ID
 import dagger.hilt.android.lifecycle.HiltViewModel

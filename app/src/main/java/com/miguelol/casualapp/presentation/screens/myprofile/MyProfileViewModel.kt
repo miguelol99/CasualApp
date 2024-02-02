@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.miguelol.casualapp.domain.model.Error
 import com.miguelol.casualapp.domain.model.Success
 import com.miguelol.casualapp.domain.model.User
-import com.miguelol.casualapp.domain.usecases.UserUseCases
+import com.miguelol.casualapp.domain.usecases.users.UserUseCases
 import com.miguelol.casualapp.domain.usecases.auth.AuthUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted

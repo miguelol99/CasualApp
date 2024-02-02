@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miguelol.casualapp.domain.model.Response
 import com.miguelol.casualapp.domain.model.UserPreview
-import com.miguelol.casualapp.domain.usecases.FriendUseCases
+import com.miguelol.casualapp.domain.usecases.friends.FriendUseCases
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.UID
 import com.miguelol.casualapp.domain.usecases.auth.AuthUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel

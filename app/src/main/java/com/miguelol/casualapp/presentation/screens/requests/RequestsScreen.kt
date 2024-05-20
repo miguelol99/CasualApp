@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miguelol.casualapp.R
 import com.miguelol.casualapp.domain.model.FriendRequest
+import com.miguelol.casualapp.domain.model.PlanPreview
 import com.miguelol.casualapp.domain.model.PlanRequest
 import com.miguelol.casualapp.domain.model.UserPreview
 import com.miguelol.casualapp.presentation.components.CustomProgressIndicator

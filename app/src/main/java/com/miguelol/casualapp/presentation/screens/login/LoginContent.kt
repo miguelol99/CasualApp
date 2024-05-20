@@ -64,6 +64,15 @@ fun LoginContent(
         ) {
             Text(text = "Login")
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                onEvent(LoginEvents.OnSignUp)
+            }
+        ) {
+            Text(text = "Sign Up")
+        }
         Row() {
             
         }

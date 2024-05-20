@@ -26,7 +26,7 @@ fun PlansContent(
     LazyColumn(
         modifier = modifier.fillMaxSize(),
     ) {
-        item {Spacer(modifier = Modifier.height(12.dp))}
+        item { Spacer(modifier = Modifier.height(12.dp)) }
         items(
             items = uiState.plans,
             key = { plan -> plan.id }

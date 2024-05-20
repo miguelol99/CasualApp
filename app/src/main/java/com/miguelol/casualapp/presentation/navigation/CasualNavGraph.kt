@@ -102,6 +102,9 @@ fun CasualNavGraph(
                     onNavigateToHome = {
                         navController.popBackStack(LOGIN_ROUTE, true)
                         navController.navigate(PLANS_ROUTE)
+                    },
+                    onNavigateToEditProfile = { firstTime ->
+                        navController.navigate("$EDIT_PROFILE_SCREEN?$FIRST_TIME=$firstTime")
                     }
                 )
             }

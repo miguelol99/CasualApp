@@ -9,19 +9,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miguelol.casualapp.presentation.components.CustomProgressIndicator
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     uiStateFlow: StateFlow<LoginUiState>,
     onEvent: (LoginEvents) -> Unit,
-    onNavigateToHome: () -> Unit
+    onNavigateToHome: () -> Unit,
+    onNavigateToEditProfile: (Boolean) -> Unit
 ) {
 
     val uiState by uiStateFlow.collectAsStateWithLifecycle()
@@ -52,5 +51,9 @@ fun LoginScreen(
 
     if (uiState.isLoggedIn) {
         LaunchedEffect(Unit) { onNavigateToHome() }
+    }
+
+    if (uiState.signedUp) {
+        LaunchedEffect(Unit) { onNavigateToEditProfile(true) }
     }
 }

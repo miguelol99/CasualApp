@@ -1,5 +1,6 @@
 package com.miguelol.casualapp.presentation.navigation
 
+import com.miguelol.casualapp.presentation.navigation.DestinationArgs.FIRST_TIME
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.PLAN_ID
 import com.miguelol.casualapp.presentation.navigation.DestinationArgs.UID
 import com.miguelol.casualapp.presentation.navigation.Screens.CHAT_SCREEN
@@ -41,7 +42,7 @@ object Destinations {
     const val SEARCH_USERS_ROUTE = SEARCH_USERS_SCREEN
     const val MY_PROFILE_ROUTE = PROFILE_SCREEN
     const val USER_PROFILE_ROUTE = "$PROFILE_SCREEN/{$UID}"
-    const val EDIT_PROFILE_ROUTE = "$EDIT_PROFILE_SCREEN?$UID={$UID}"
+    const val EDIT_PROFILE_ROUTE = "$EDIT_PROFILE_SCREEN?$FIRST_TIME={$FIRST_TIME}"
     const val PLANS_ROUTE = PLANS_SCREEN
     const val CREATE_PLAN_ROUTE = CREATE_PLAN_SCREEN
     const val MY_PLANS_ROUTE = MY_PLANS_SCREEN

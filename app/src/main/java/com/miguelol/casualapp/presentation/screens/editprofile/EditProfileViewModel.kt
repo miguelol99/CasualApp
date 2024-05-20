@@ -1,5 +1,6 @@
 package com.miguelol.casualapp.presentation.screens.editprofile
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.miguelol.casualapp.domain.model.Success
@@ -7,6 +8,7 @@ import com.miguelol.casualapp.domain.model.Error
 import com.miguelol.casualapp.domain.model.User
 import com.miguelol.casualapp.domain.usecases.auth.AuthUseCases
 import com.miguelol.casualapp.domain.usecases.users.UserUseCases
+import com.miguelol.casualapp.presentation.navigation.DestinationArgs.FIRST_TIME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,12 +53,13 @@ sealed interface EditProfileEvents {
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
     private val authUseCases: AuthUseCases,
-    private val userUseCases: UserUseCases
+    private val userUseCases: UserUseCases,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val uid: String = authUseCases.getCurrentUser()?.uid!!
 
-    //private val firstTime: Boolean = checkNotNull(savedStateHandle["firstTime"])
+    private val firstTime: Boolean = checkNotNull(savedStateHandle[FIRST_TIME])
     private var isNewImage: Boolean = false
     private var originalUsername: String = ""
 
@@ -108,7 +111,7 @@ class EditProfileViewModel @Inject constructor(
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000L),
-        initialValue = EditProfileUiState(isLoading = true)
+        initialValue = EditProfileUiState(isLoading = !firstTime)
     )
 
     init {

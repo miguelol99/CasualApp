@@ -43,6 +43,7 @@ import com.miguelol.casualapp.domain.usecases.auth.AuthUseCases
 import com.miguelol.casualapp.domain.usecases.auth.GetCurrentUser
 import com.miguelol.casualapp.domain.usecases.auth.LogIn
 import com.miguelol.casualapp.domain.usecases.auth.SignOut
+import com.miguelol.casualapp.domain.usecases.auth.SignUp
 import com.miguelol.casualapp.domain.usecases.images.ImageUseCases
 import com.miguelol.casualapp.domain.usecases.images.SaveImage
 import com.miguelol.casualapp.domain.usecases.plans.AddParticipant
@@ -95,6 +96,7 @@ object AppModule {
     fun provideAuthUseCases(authRepository: AuthRepository) = AuthUseCases(
         getCurrentUser = GetCurrentUser(authRepository),
         logIn = LogIn(authRepository),
+        signUp = SignUp(authRepository),
         signOut = SignOut(authRepository)
     )
     @Provides
@@ -119,14 +121,13 @@ object AppModule {
         requestRepo: FriendRequestRepository,
         friendUseCases: FriendUseCases,
         userUseCases: UserUseCases
-    ) =
-        FriendRequestUseCases(
-            getFriendRequests = GetFriendRequests(requestRepo),
-            acceptRequest = AcceptRequest(requestRepo, friendUseCases),
-            declineRequest = DeclineRequest(requestRepo),
-            createRequest = CreateRequest(requestRepo, friendUseCases, userUseCases),
-            getFriendState = GetFriendState(requestRepo, friendUseCases)
-        )
+    ) = FriendRequestUseCases(
+        getFriendRequests = GetFriendRequests(requestRepo),
+        acceptRequest = AcceptRequest(requestRepo, friendUseCases),
+        declineRequest = DeclineRequest(requestRepo),
+        createRequest = CreateRequest(requestRepo, friendUseCases, userUseCases),
+        getFriendState = GetFriendState(requestRepo, friendUseCases)
+    )
 
     @Provides
     fun provideFriendUseCases(

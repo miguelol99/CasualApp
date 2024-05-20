@@ -15,7 +15,9 @@ import com.miguelol.casualapp.domain.repositories.PlanRequestRepository
 import com.miguelol.casualapp.utils.Constants
 import com.miguelol.casualapp.utils.Constants.PLAN_REQUESTS
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -33,6 +35,7 @@ class PlanRequestRepositoryImpl @Inject constructor(
             .map<QuerySnapshot, Response<List<PlanRequest>>> { Success(it.toObjects()) }
             .catch { it.printStackTrace(); emit(Response.Error(Exception(it))) }
 
+    val transform: (QuerySnapshot) -> Response<List<PlanRequest>> = {Success(it.toObjects())}
 
     override fun getPlanRequest(toUid: String, requestId: String): Flow<Response<PlanRequest?>> =
         usersRef.document(toUid).collection(PLAN_REQUESTS).document(requestId)
@@ -42,6 +45,7 @@ class PlanRequestRepositoryImpl @Inject constructor(
 
     override suspend fun createPlanRequest(toUid: String, request: PlanRequest): Response<Unit> {
         return try {
+            emptyFlow<Integer>().map {  }
             usersRef.document(toUid).collection(PLAN_REQUESTS).document(request.id).set(request).await()
             Success(Unit)
         } catch (e: Exception){

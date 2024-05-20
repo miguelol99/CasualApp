@@ -4,6 +4,7 @@ import com.miguelol.casualapp.domain.model.PlanRequest
 import com.miguelol.casualapp.domain.model.Response
 import com.miguelol.casualapp.domain.model.Success
 import com.miguelol.casualapp.domain.model.Error
+import com.miguelol.casualapp.domain.model.PlanPreview
 import com.miguelol.casualapp.domain.model.UserPreview
 import com.miguelol.casualapp.domain.repositories.PlanRequestRepository
 import com.miguelol.casualapp.domain.usecases.plans.PlanUseCases

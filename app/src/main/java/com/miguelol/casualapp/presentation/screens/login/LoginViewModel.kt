@@ -38,8 +38,8 @@ class LoginViewModel @Inject constructor(private val authUseCases: AuthUseCases)
     private val _signedUp = MutableStateFlow(false)
     private val _isLoading = MutableStateFlow(false)
     private val _error: MutableStateFlow<String?> = MutableStateFlow(null)
-    private val _email = MutableStateFlow("mnsendino@gmail.com")
-    private val _password = MutableStateFlow("123456")
+    private val _email = MutableStateFlow("")
+    private val _password = MutableStateFlow("")
 
     val uiState = combine(_isLoggedIn, _signedUp, _email, _password, _isLoading, _error)
     { array ->
